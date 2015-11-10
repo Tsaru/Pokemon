@@ -20,23 +20,31 @@ private:
 	float catch_rate;
 	vector<string> status_effects;
 	string ability;
+	int hp;
+	int attack;
+	int defense;
+	int sp_attack;
+	int sp_defense
+	int speed;
 	int ivs_hp;
-	int IV_Attack;
-	int IV_Defense;
-	int IV_Special Attack;
-	int IV_Special Defense;
-	int IV_Speed;
-	int Base_HP;
-	int Base_Attack;
-	int Base_Defense;
-	int Base_Special Attack;
-	int Base_Special Defense;
-	int Base_Speed;
-	int Leveling_Speed;
+    int iv_attack;
+	int iv_defense;
+	int iv_sp_attack;
+	int iv_sp_defense;
+	int iv_speed;
+	int base_hp;
+	int base_attack;
+	int base_defense;
+	int base_special attack;
+	int base_special defense;
+	int base_speed;
+	int leveling_speed;
 	void set_stats();
+	void add_experience(int);
+	void
 
 public:
-
+    int
 
 
 };
