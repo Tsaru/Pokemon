@@ -24,7 +24,7 @@ private:
 	int attack;
 	int defense;
 	int sp_attack;
-	int sp_defense
+	int sp_defense;
 	int speed;
 	int ivs_hp;
     int iv_attack;
@@ -35,16 +35,13 @@ private:
 	int base_hp;
 	int base_attack;
 	int base_defense;
-	int base_special attack;
-	int base_special defense;
+	int base_sp_attack;
+	int base_sp_defense;
 	int base_speed;
 	int leveling_speed;
 	void set_stats();
 	void add_experience(int);
-	void
 
-public:
-    int
-
+    public:
 
 };
