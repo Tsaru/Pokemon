@@ -27,15 +27,12 @@ void Pokemon::Open_Base_Pokemon(string name) {
     getline(file, value);
 
     //find the correct line
-    cout << "2\n";
     file >> value;
     while(value != name) {
         cout << value << endl;
         getline(file, value);
         file >> value;
     }
-    cout << value << endl;
-    cout << "3\n";
     //Get the basic values
     species_name = name;
     file >> value;
@@ -70,7 +67,6 @@ void Pokemon::Open_Base_Pokemon(string name) {
 
 	//Get the abilities and choose a random ability
 	if(random_num()%150 == 0) {
-        cout << "4\n";
         file >> value;
         if(value[0] == '<') {
             while(value[-1] != '>') {
@@ -98,7 +94,6 @@ void Pokemon::Open_Base_Pokemon(string name) {
             temp_abilities.push_back(value);
             file >> value;
             while(value[-1] != '>') {
-                cout << "4\n";
                 temp_abilities.push_back(value);
                 file >> value;
             }
@@ -113,7 +108,6 @@ void Pokemon::Open_Base_Pokemon(string name) {
             }
         }
 	}
-    cout << "5\n";
 
 	file >> value;
 	exp_yield = stoi(value);
@@ -126,9 +120,7 @@ void Pokemon::Open_Base_Pokemon(string name) {
 }
 
 Pokemon::Pokemon() {
-    cout << "1\n";
     Open_Base_Pokemon("Pikachu");
-    cout << "10\n";
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 random_num(seed+1);
 
@@ -171,16 +163,17 @@ void Pokemon::set_stats() {
 }
 
 void Pokemon::display() {
-    cout << "name: " << species_name << endl;
-    cout << "number: " << pokedex_number << endl;
-    cout << "gender: ";
+    cout << "======================New Pokemon====================\n";
+    cout << "Name: " << species_name << endl;
+    cout << "Number: " << pokedex_number << endl;
+    cout << "Gender: ";
     if(gender)
-        cout << "male";
-    else cout << "female";
-    cout << "\n level: " << level << endl;
-    cout << "exp yield: " << exp_yield << endl;
-    cout << "leveling speed: " << leveling_speed << endl;
-    cout << "evolves at " << evolves_at;
+        cout << "Male";
+    else cout << "Female";
+    cout << "\nLevel: " << level << endl;
+    cout << "Exp Yield: " << exp_yield << endl;
+    cout << "Leveling Speed: " << leveling_speed << endl;
+    cout << "Evolves at " << evolves_at;
     cout << " to " << evolves_to << endl;
     cout << "Type: ";
     for(auto i = type.begin(); i != type.end(); ++i) {
@@ -204,14 +197,14 @@ void Pokemon::display() {
     cout << "Special Attack: " << sp_attack << endl;
     cout << "Special Defense: " << sp_defense << endl;
     cout << "Speed: " << speed << endl;
-    cout << "===IVS===\n";
+    cout << "=========================IVS=========================\n";
     cout << "HP: " << iv_hp << endl;
     cout << "Attack: " << iv_attack << endl;
     cout << "Defense: " << iv_defense << endl;
     cout << "Special Attack:" << iv_sp_attack << endl;
     cout << "Special Defense: " << iv_sp_defense << endl;
     cout << "Speed: " << iv_speed << endl;
-    cout << "===Base Stats===\n";
+    cout << "======================Base Stats=====================\n";
     cout << "HP: " << base_hp << endl;
     cout << "Attack: " << base_attack << endl;
     cout << "Defense: " << base_defense << endl;

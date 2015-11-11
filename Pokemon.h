@@ -67,6 +67,7 @@ class Pokemon {
                 string status_condition, vector<string> moveset, int attack, int defense, int sp_attack, int sp_defense,
                 int speed);
         void display();
+        bool isshiny() { return shiny;}
 };
 
 int stoi(std::string input);
