@@ -1,0 +1,6 @@
+Name Number HP AT DF SA SD SP Type Catch_Rate Abilities Hidden_Ability EXP_Yield Level_Speed Evolves_At Evolves_To
+Pikachu 025 35 55 30 50 40 90 Electric 190 Static "Lightning Rod" 82 3 36 Raichu
+Raichu 026 60 90 55 90 80 100 Electric 75 Static "Lightning Rod" 122 3 101 -----
+Bulbasaur 001 45 49 49 65 65 45 <Grass Poison> 45 Overgrow Chlorophyll 64 2 16 Ivysaur
+Ivysaur 002 60 62 63 80 80 60 <Grass Poison> 45 Overgrow Chlorophyll 141 2 32 Venusaur
+Venusaur 003 80 82 83 100 100 80 <Grass Poison> 45 Overgrow Chlorophyll 208 2 101 -----

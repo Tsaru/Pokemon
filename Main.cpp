@@ -3,6 +3,14 @@
  using namespace std;
 
  int main() {
-    cout << "Hello World!\n";
+     Pokemon my_pokemon;
+     my_pokemon = Pokemon();
+     my_pokemon.display();
+     my_pokemon = Pokemon();
+     my_pokemon.display();
+     my_pokemon = Pokemon();
+     my_pokemon.display();
+     my_pokemon = Pokemon();
+     my_pokemon.display();
     return 0;
  }
