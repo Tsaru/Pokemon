@@ -1,21 +1,21 @@
     #include "Pokemon.h"
     #include<iostream>
+    #include<windows.h>
      using namespace std;
 
      int main() {
-        Pokemon my_pokemon;
-        my_pokemon = Pokemon();
-        my_pokemon.display();
-
+        string name = "Pikachu";
         int attempts = 0;
-        cout << my_pokemon.isshiny();
-        while(!my_pokemon.isshiny());
-        {
-          my_pokemon = Pokemon();
-          my_pokemon.display();
-          ++attempts;
-        }
+        Pokemon *my_pokemon;
+        my_pokemon = new Pokemon(name, attempts++);
+        my_pokemon->display();
 
-
+        /*while(!my_pokemon->isshiny()) {
+            //cin >> value;
+            delete my_pokemon;
+            my_pokemon = new Pokemon(name, attempts);
+            my_pokemon->display();
+            cout << "\n======================\n"<< "Attempts: " << ++attempts << "\n======================\n";
+        }*/
         return 0;
      }

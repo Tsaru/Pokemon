@@ -16,23 +16,27 @@ int stoi(string input) { //string to int.
     return Result;
 }
 
-void Pokemon::Open_Base_Pokemon(string name) {
+void Pokemon::Open_Base_Pokemon(string name, int seed_mod) {
     string value = "-";
     std::ifstream file;
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() + seed_mod;
     std::mt19937 random_num(seed);
     file.open("Pokemon.txt");
 
-    //Remove the format line
-    getline(file, value);
+    //Remove the format lines
+    while(value.size() != 0) {
+        getline(file, value);
+    }
 
     //find the correct line
     file >> value;
     while(value != name) {
-        cout << value << endl;
-        getline(file, value);
+        while(!file.eof() and value.size() != 0) {
+            getline(file, value);
+        }
         file >> value;
     }
+    cout << value << endl;
     //Get the basic values
     species_name = name;
     file >> value;
@@ -49,66 +53,8 @@ void Pokemon::Open_Base_Pokemon(string name) {
 	base_sp_defense = stoi(value);
     file >> value;
 	base_speed = stoi(value);
-
-    //Get the type(s)
-    type.clear();
-	file >> value;
-	if(value[0]=='<') {
-        value = value.substr(1, value.size());
-        type.push_back(value);
-        file >> value;
-        value = value.substr(0, value.size()-1);
-	}
-	type.push_back(value);
-
-    //Get the catch rate
 	file >> value;
 	catch_rate = stoi(value);
-
-	//Get the abilities and choose a random ability
-	if(random_num()%150 == 0) {
-        file >> value;
-        if(value[0] == '<') {
-            while(value[-1] != '>') {
-                file >> value;
-            }
-        }
-        file >> value;
-        if(value[0] == '"') {
-            ability = "";
-            value = value.substr(1, value.size());
-            while(value[-1] != '"') {
-                ability  += " " + value;
-                file >> value;
-            }
-            ability += value.substr(0, value.size()-1);
-        } else {
-            ability = value;
-        }
-	} else {
-	    vector<string> temp_abilities;
-	    temp_abilities.clear();
-        file >> value;
-        if(value[0]=='<') {
-            value = value.substr(1, value.size());
-            temp_abilities.push_back(value);
-            file >> value;
-            while(value[-1] != '>') {
-                temp_abilities.push_back(value);
-                file >> value;
-            }
-            value = value.substr(0, value.size()-1);
-        }
-        temp_abilities.push_back(value);
-        ability = temp_abilities[random_num()%temp_abilities.size()];
-        file >> value;
-        if(value[0] == '"') {
-            while(value[value.size()-1] != '"') {
-                file >> value;
-            }
-        }
-	}
-
 	file >> value;
 	exp_yield = stoi(value);
 	file >> value;
@@ -117,11 +63,54 @@ void Pokemon::Open_Base_Pokemon(string name) {
 	evolves_at = stoi(value);
 	file >> value;
 	evolves_to = value;
+
+    //Get the type(s)
+    type.clear();
+    getline(file, value);
+	while(file.peek() != '\n') {
+        file >> value;
+        type.push_back(value);
+	}
+
+	//Get the abilities and choose a random ability
+	getline(file, value);
+	if(random_num()%150 == 0) {
+        getline(file, value);
+        getline(file, value);
+        ability = value;
+	} else {
+	    vector<string> temp_abilities;
+	    temp_abilities.clear();
+	    while(file.peek() != '\n') {
+            file >> value;
+            if(value[0] == '"') {
+                temp_abilities.push_back(value.substr(1, value.size()));
+                file >> value;
+                while(value[value.size()-1] != '"') {
+                    temp_abilities[-1] += " " + value;
+                    file >> value;
+                }
+                temp_abilities[1] += " " + value.substr(0, value.size()-1);
+            } else { temp_abilities.push_back(value);}
+	    }
+        ability = temp_abilities[random_num()%temp_abilities.size()];
+        getline(file, value);
+        getline(file, value);
+	}
+	learnset.clear();
+	while(!file.eof() and file.peek()!='\n') {
+        file >> value;
+        learnset.push_back(make_pair(stoi(value), ""));
+        getline(file, value);
+        learnset[learnset.size()-1].second = value;
+	}
+	file.close();
 }
 
-Pokemon::Pokemon() {
-    Open_Base_Pokemon("Pikachu");
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+Pokemon::Pokemon(string name, int seed_mod) {
+    Open_Base_Pokemon(name, seed_mod);
+    cout << "Opened the pokemon!\n";
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count()+seed_mod;
     std::mt19937 random_num(seed+1);
 
 	iv_hp = random_num()%32;
@@ -146,11 +135,20 @@ Pokemon::Pokemon() {
 	current_hp = max_hp;
 	current_xp = 0;
 	gender = random_num()%2;
-	moveset.clear();
-	moveset.push_back("Tackle");
 	held_item.clear();
 	held_item = "Empty";
 	status = "";
+	moveset.push_back("Empty");
+	moveset.push_back("Empty");
+	moveset.push_back("Empty");
+	moveset.push_back("Empty");
+	for(auto i = learnset.begin(); i != learnset.end(); ++i) {
+        if(i->first <= level) {
+            moveset.erase(moveset.begin());
+            moveset.push_back(i->second);
+        }
+        else break;
+	}
 }
 
 void Pokemon::set_stats() {
@@ -211,4 +209,12 @@ void Pokemon::display() {
     cout << "Special Attack: " << base_sp_attack << endl;
     cout << "Special Defense: " << base_sp_defense << endl;
     cout << "Speed: " << base_speed << endl;
+    cout << "======================Learnset=====================\n";
+	for(auto i = learnset.begin(); i != learnset.end(); ++i) {
+        cout << i->first << "  " << i->second << endl;
+	}
+    cout << "======================Moveset=====================\n";
+    cout << moveset[0] << "      " << moveset[1] << endl;
+    cout << moveset[2] << "      " << moveset[3] << endl;
+
 }

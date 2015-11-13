@@ -34,6 +34,7 @@
 		<Unit filename="Main.cpp" />
 		<Unit filename="Pokemon.cpp" />
 		<Unit filename="Pokemon.h" />
+		<Unit filename="Pokemon.txt" />
 		<Extensions>
 			<code_completion />
 			<envvars />

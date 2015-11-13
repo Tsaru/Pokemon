@@ -1,9 +1,11 @@
 
 #include<vector>
 #include<string>
+#include<utility>
 
 using std::string;
 using std::vector;
+using std::pair;
 
 class Pokemon {
 
@@ -20,6 +22,7 @@ class Pokemon {
         int nature [2];
         bool shiny;
         vector<string> moveset;
+        vector<pair<int, string>> learnset;
         string held_item;
         int current_hp;
         int current_xp;
@@ -45,7 +48,7 @@ class Pokemon {
         int base_sp_defense;
         int base_speed;
         void set_stats();
-        void Open_Base_Pokemon(string);
+        void Open_Base_Pokemon(string, int);
 
     public:
         int get_gender(){return gender;}
@@ -62,7 +65,8 @@ class Pokemon {
         int get_sp_defense(){return sp_defense;}
         int get_speed(){return speed;}
         vector<string> get_type(){return type;}
-        Pokemon();
+        //Pokemon();
+        Pokemon(string, int);
         Pokemon(string species_name, int gender, int level, bool shiny, int current_hp, int current_xp, string ability,
                 string status_condition, vector<string> moveset, int attack, int defense, int sp_attack, int sp_defense,
                 int speed);
