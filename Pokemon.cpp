@@ -160,7 +160,73 @@ void Pokemon::set_stats() {
     speed = base_speed + base_speed/50*level + iv_speed;
 }
 
+void Pokemon::add_exp(int exp) {
+
+}
+
+int Pokemon::exp_for_level(int level) {
+    if(leveling_speed == 1) {
+
+    }
+    if(leveling_speed == 2) {
+
+    }
+    if(leveling_speed == 3) {
+
+    }
+    if(leveling_speed == 4) {
+
+    }
+}
+
+void Pokemon::progress_bar(int value, int total, int length) {
+    int progress = (((double) value)/((double) total)*((double) length));
+    cout << "<";
+    while(--length > 0) {
+        if(--progress > 0) {
+            cout << (char) 219;
+        } else {
+            cout << " ";
+        }
+    }
+    cout << ">";
+}
+
 void Pokemon::display() {
+    cout << "Lvl " << level << " " << species_name << "  " << 12-gender << endl;
+    cout << "HP: " << current_hp << "/" << max_hp << "  ";
+    progress_bar(current_hp, max_hp);
+    cout << "\nAttack: " << attack << endl;
+    cout << "Defense: " << defense << endl;
+    cout << "Sp.Atk: " << sp_attack << endl;
+    cout << "Sp.Def: " << sp_defense << endl;
+    cout << "Speed: " << speed << endl;
+    cout << "Exp. Points: " << current_xp << "  |  " << "Exp. Needed: " << current_xp << endl;
+    progress_bar(current_xp, current_xp);
+    cout << "\nAbility: " << ability << endl;
+}
+
+void Pokemon::print_moveset() {
+    cout << moveset[0] << "      " << moveset[1] << endl;
+    cout << moveset[2] << "      " << moveset[3] << endl;
+}
+
+void Pokemon::print_learnset() {
+	for(auto i = learnset.begin(); i != learnset.end(); ++i) {
+        cout << i->first << "  " << i->second << endl;
+	}
+}
+
+void Pokemon::print_ivs() {
+    cout << "HP: " << iv_hp << endl;
+    cout << "Attack: " << iv_attack << endl;
+    cout << "Defense: " << iv_defense << endl;
+    cout << "Special Attack:" << iv_sp_attack << endl;
+    cout << "Special Defense: " << iv_sp_defense << endl;
+    cout << "Speed: " << iv_speed << endl;
+}
+
+void Pokemon::full_display() {
     cout << "======================New Pokemon====================\n";
     cout << "Name: " << species_name << endl;
     cout << "Number: " << pokedex_number << endl;

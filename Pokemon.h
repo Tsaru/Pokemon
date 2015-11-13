@@ -49,6 +49,7 @@ class Pokemon {
         int base_speed;
         void set_stats();
         void Open_Base_Pokemon(string, int);
+        void progress_bar(int value, int total, int length = 40);
 
     public:
         int get_gender(){return gender;}
@@ -70,7 +71,13 @@ class Pokemon {
         Pokemon(string species_name, int gender, int level, bool shiny, int current_hp, int current_xp, string ability,
                 string status_condition, vector<string> moveset, int attack, int defense, int sp_attack, int sp_defense,
                 int speed);
+        void add_exp(int);
+        int exp_for_level(int);
+        void full_display();
         void display();
+        void print_moveset();
+        void print_learnset();
+        void print_ivs();
         bool isshiny() { return shiny;}
 };
 
