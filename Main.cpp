@@ -9,6 +9,7 @@
         Pokemon *my_pokemon;
         my_pokemon = new Pokemon(name, attempts++);
         my_pokemon->display();
+        my_pokemon->full_display();
 
         /*while(!my_pokemon->isshiny()) {
             //cin >> value;

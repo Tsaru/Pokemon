@@ -16,6 +16,15 @@ int stoi(string input) { //string to int.
     return Result;
 }
 
+bool is_int(string text) { //check if a number is a legal integer.
+    if(text.size()==0) { return false; }
+    for(int i = 0; i < text.size(); ++i)
+        if(!isdigit(text[i]) && (i!=0 || text[0]!='-' || text.size()<2)) {
+            return false;
+        }
+    return true;
+}
+
 void Pokemon::Open_Base_Pokemon(string name, int seed_mod) {
     string value = "-";
     std::ifstream file;
@@ -36,7 +45,7 @@ void Pokemon::Open_Base_Pokemon(string name, int seed_mod) {
         }
         file >> value;
     }
-    cout << value << endl;
+
     //Get the basic values
     species_name = name;
     file >> value;
@@ -109,7 +118,6 @@ void Pokemon::Open_Base_Pokemon(string name, int seed_mod) {
 
 Pokemon::Pokemon(string name, int seed_mod) {
     Open_Base_Pokemon(name, seed_mod);
-    cout << "Opened the pokemon!\n";
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count()+seed_mod;
     std::mt19937 random_num(seed+1);
 
@@ -131,9 +139,10 @@ Pokemon::Pokemon(string name, int seed_mod) {
 	}
 
 	level = random_num()%100+1;
+
 	set_stats();
 	current_hp = max_hp;
-	current_xp = 0;
+	current_xp = exp_for_level(level);
 	gender = random_num()%2;
 	held_item.clear();
 	held_item = "Empty";
@@ -160,23 +169,63 @@ void Pokemon::set_stats() {
     speed = base_speed + base_speed/50*level + iv_speed;
 }
 
-void Pokemon::add_exp(int exp) {
+void Pokemon::level_up() {
+    if(level < 100) {
+        level += 1;
+        for(auto i = learnset.begin(); i != learnset.end(); ++i) {
+            if(i->first == level) {
+                string selection = "";
+                cout << species_name << " is learning a new move!\n";
+                print_moveset();
+                cout << "(5) " << i->second << endl;
+                do {
+                    cout << "Please choose a move to forget (or 5 to stop learning " << i->second << ")\n"
+                         << "Selection: ";
+                    cin >> selection;
+                    if(is_int(selection)) {
+                        if(stoi(selection) < 0 or stoi(selection) > 5) {
+                            selection = "-";
+                        }
+                    }
+                    if(!is_int(selection)) {
+                        cout << "Valid input is an integer between 1 and 5.\n";
+                    }
+                } while(!is_int(selection));
+                if(stoi(selection) != 5) {
+                    cout << species_name << " forgot " << moveset[stoi(selection)-1]
+                         << " and learned " << i->second << "!\n";
+                    moveset[stoi(selection)-1] = i->second;
 
+                }
+                else {
+                    cout << species_name << " stopped trying to learn " << i->second << ".\n";
+                }
+            }
+        }
+    }
+}
+
+void Pokemon::add_exp(int exp) {
+    current_xp += exp;
+    while(current_xp >= exp_for_level(level + 1)) {
+        level_up();
+    }
 }
 
 int Pokemon::exp_for_level(int level) {
     if(leveling_speed == 1) {
-
+        return 5*level*level*level/4;
     }
     if(leveling_speed == 2) {
-
+        return 6*level*level*level/5-15*level*level+100*level-140;
     }
     if(leveling_speed == 3) {
-
+        return level*level*level;
     }
     if(leveling_speed == 4) {
-
+        return 4*level*level*level/5;
     }
+    return 0;
 }
 
 void Pokemon::progress_bar(int value, int total, int length) {
@@ -192,8 +241,17 @@ void Pokemon::progress_bar(int value, int total, int length) {
     cout << ">";
 }
 
+void Pokemon::battle_display() {
+
+
+    cout << species_name << " " << (char) (12-gender) << "    Lvl " << level << endl
+         << "   HP ";
+    progress_bar(current_hp, max_hp);
+    cout << "\n                 " << current_hp << "/" << max_hp << endl;
+}
+
 void Pokemon::display() {
-    cout << "Lvl " << level << " " << species_name << "  " << 12-gender << endl;
+    cout << "Lvl " << level << " " << species_name << "  " << (char) (12-gender) << endl;
     cout << "HP: " << current_hp << "/" << max_hp << "  ";
     progress_bar(current_hp, max_hp);
     cout << "\nAttack: " << attack << endl;
@@ -201,14 +259,14 @@ void Pokemon::display() {
     cout << "Sp.Atk: " << sp_attack << endl;
     cout << "Sp.Def: " << sp_defense << endl;
     cout << "Speed: " << speed << endl;
-    cout << "Exp. Points: " << current_xp << "  |  " << "Exp. Needed: " << current_xp << endl;
-    progress_bar(current_xp, current_xp);
+    cout << "Exp. Points: " << current_xp << "  |  " << "Exp. Needed: " << exp_for_level(level+1)-current_xp << endl;
+    progress_bar(current_xp-exp_for_level(level), exp_for_level(level+1)-exp_for_level(level));
     cout << "\nAbility: " << ability << endl;
 }
 
 void Pokemon::print_moveset() {
-    cout << moveset[0] << "      " << moveset[1] << endl;
-    cout << moveset[2] << "      " << moveset[3] << endl;
+    cout << "(1) " << moveset[0] << "      (2) " << moveset[1] << endl;
+    cout << "(3) " << moveset[2] << "      (4) " << moveset[3] << endl;
 }
 
 void Pokemon::print_learnset() {
@@ -275,12 +333,7 @@ void Pokemon::full_display() {
     cout << "Special Attack: " << base_sp_attack << endl;
     cout << "Special Defense: " << base_sp_defense << endl;
     cout << "Speed: " << base_speed << endl;
-    cout << "======================Learnset=====================\n";
-	for(auto i = learnset.begin(); i != learnset.end(); ++i) {
-        cout << i->first << "  " << i->second << endl;
-	}
-    cout << "======================Moveset=====================\n";
-    cout << moveset[0] << "      " << moveset[1] << endl;
-    cout << moveset[2] << "      " << moveset[3] << endl;
+    print_learnset();
+    print_moveset();
 
 }

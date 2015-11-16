@@ -2,6 +2,8 @@
 #include<vector>
 #include<string>
 #include<utility>
+#ifndef _Pokemon_
+#define _Pokemon_
 
 using std::string;
 using std::vector;
@@ -50,6 +52,8 @@ class Pokemon {
         void set_stats();
         void Open_Base_Pokemon(string, int);
         void progress_bar(int value, int total, int length = 40);
+        int exp_for_level(int);
+        void level_up();
 
     public:
         int get_gender(){return gender;}
@@ -65,6 +69,7 @@ class Pokemon {
         int get_sp_attack(){return sp_attack;}
         int get_sp_defense(){return sp_defense;}
         int get_speed(){return speed;}
+        string get_move(int slot) {return moveset[slot-1];}
         vector<string> get_type(){return type;}
         //Pokemon();
         Pokemon(string, int);
@@ -72,8 +77,8 @@ class Pokemon {
                 string status_condition, vector<string> moveset, int attack, int defense, int sp_attack, int sp_defense,
                 int speed);
         void add_exp(int);
-        int exp_for_level(int);
         void full_display();
+        void battle_display();
         void display();
         void print_moveset();
         void print_learnset();
@@ -82,3 +87,7 @@ class Pokemon {
 };
 
 int stoi(std::string input);
+
+bool is_int(std::string text);
+
+#endif
