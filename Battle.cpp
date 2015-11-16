@@ -1,5 +1,10 @@
 
 #include "Battle.h"
+#include<iostream>
+#include<string>
+#include<utility>
+
+using namespace std;
 
 pair<int, string> Battle::input_main(int player) {
     Pokemon *p;
@@ -10,7 +15,7 @@ pair<int, string> Battle::input_main(int player) {
     string input = "-";
     while(1) {
         while(!is_int(input)) {
-            p.battle_display();
+            p->battle_display();
             cout << "(1) Fight    (2) Bag\n"
                  << "(3) Pokemon  (4) Run\n";
             cin >> input;
@@ -21,18 +26,18 @@ pair<int, string> Battle::input_main(int player) {
                 }
             }
         }
-        if(input = "1") {
+        if(input == "1") {
             input = input_move(player);
             if(input != "-")
                 return make_pair(1, input);
         }
         else if(input == "2") {
-            selection = input_bag(player);
+            input = input_bag(player);
         }
         else if(input == "3") {
-            selection = input_pokemon(player);
+            input = input_pokemon(player);
         }
-        else return 4;
+        else return make_pair(4, "");
     }
 }
 
@@ -49,8 +54,8 @@ string Battle::input_move(int player) {
         p = P2;
     while(!is_int(input)) {
         cls();
-        p.battle_display();
-        p.print_moveset();
+        p->battle_display();
+        p->print_moveset();
         cout << "(5) Back\nSelection: ";
         cin >> input;
         if(is_int(input)) {
@@ -71,7 +76,7 @@ string Battle::input_move(int player) {
     if(input == "5") {
         return "-";
     }
-    return p.get_move(stoi(input));
+    return p->get_move(stoi(input));
 }
 
 string Battle::input_pokemon(int player) {
@@ -83,7 +88,7 @@ void Battle::Run() {
     while(P1->get_current_hp()>0 and P2->get_current_hp()>0) {
         p1_move = input_main(1);
         p2_move = input_main(2);
-        if(speed_calc(p1_move) >= speed_calc(p2_move)) {
+        /*if(speed_calc(p1_move) >= speed_calc(p2_move)) {
             if(p1_move.first == 1) {
                 //Player1's pokemon is attacking with the move named p1_move.second
                 //Everything that entails needs to be implemented
@@ -91,7 +96,7 @@ void Battle::Run() {
                 //This code will change slightly when we've made a team class
                 //The team class will have 6 pokemon slots and will just make interacting with a team easy
             }
-        }
+        }*/
     }
 }
 
